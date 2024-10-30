@@ -11,8 +11,8 @@ module.exports = [
 			filename: "mobile.js"
 		},
 		plugins: [
-			new webpack.DefinePlugin({
-				ENV: JSON.stringify("mobile")
+			new webpack.EnvironmentPlugin({
+				ENV: "mobile"
 			})
 		]
 	},
@@ -26,8 +26,8 @@ module.exports = [
 			filename: "desktop.js"
 		},
 		plugins: [
-			new webpack.DefinePlugin({
-				ENV: JSON.stringify("desktop")
+			new webpack.EnvironmentPlugin({
+				ENV: "desktop"
 			})
 		]
 	}

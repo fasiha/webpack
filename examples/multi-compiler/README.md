@@ -1,17 +1,18 @@
 # example.js
 
 ```javascript
-if(ENV === "mobile") {
+if (process.env.TESTING && process.env.ENV === "mobile") {
 	require("./mobile-stuff");
 }
-console.log("Running " + ENV + " build");
+console.log("Running " + process.env.ENV + " build");
 ```
 
 # webpack.config.js
 
 ```javascript
-var path = require("path");
-var webpack = require("../../");
+const path = require("path");
+const webpack = require("../../");
+
 module.exports = [
 	{
 		name: "mobile",
@@ -22,8 +23,8 @@ module.exports = [
 			filename: "mobile.js"
 		},
 		plugins: [
-			new webpack.DefinePlugin({
-				ENV: JSON.stringify("mobile")
+			new webpack.EnvironmentPlugin({
+				ENV: "mobile"
 			})
 		]
 	},
@@ -37,8 +38,8 @@ module.exports = [
 			filename: "desktop.js"
 		},
 		plugins: [
-			new webpack.DefinePlugin({
-				ENV: JSON.stringify("desktop")
+			new webpack.EnvironmentPlugin({
+				ENV: "desktop"
 			})
 		]
 	}
@@ -49,13 +50,12 @@ module.exports = [
 
 ```javascript
 /******/ (() => { // webpackBootstrap
-var __webpack_exports__ = {};
 /*!********************!*\
   !*** ./example.js ***!
   \********************/
 /*! unknown exports (runtime-defined) */
 /*! runtime requirements:  */
-if(false) {}
+if (process.env.TESTING && "desktop" === "mobile") {}
 console.log("Running " + "desktop" + " build");
 /******/ })()
 ;
@@ -115,7 +115,6 @@ console.log("Running " + "desktop" + " build");
 </details>
 
 ``` js
-var __webpack_exports__ = {};
 // This entry needs to be wrapped in an IIFE because it needs to be isolated against other modules in the chunk.
 (() => {
 /*!********************!*\
@@ -123,7 +122,7 @@ var __webpack_exports__ = {};
   \********************/
 /*! unknown exports (runtime-defined) */
 /*! runtime requirements: __webpack_require__ */
-if(true) {
+if (process.env.TESTING && "mobile" === "mobile") {
 	__webpack_require__(/*! ./mobile-stuff */ 1);
 }
 console.log("Running " + "mobile" + " build");
@@ -139,44 +138,44 @@ console.log("Running " + "mobile" + " build");
 
 ```
 mobile:
-  asset mobile.js 1.74 KiB [emitted] (name: main)
-  chunk (runtime: main) mobile.js (main) 114 bytes [entry] [rendered]
+  asset mobile.js 1.75 KiB [emitted] (name: main)
+  chunk (runtime: main) mobile.js (main) 162 bytes [entry] [rendered]
     > ./example main
     dependent modules 20 bytes [dependent] 1 module
-    ./example.js 94 bytes [built] [code generated]
+    ./example.js 142 bytes [built] [code generated]
       [used exports unknown]
       entry ./example main
-  mobile (webpack 5.78.0) compiled successfully
+  mobile (webpack 5.95.0) compiled successfully
 
 desktop:
-  asset desktop.js 292 bytes [emitted] (name: main)
-  chunk (runtime: main) desktop.js (main) 94 bytes [entry] [rendered]
+  asset desktop.js 303 bytes [emitted] (name: main)
+  chunk (runtime: main) desktop.js (main) 142 bytes [entry] [rendered]
     > ./example main
-    ./example.js 94 bytes [built] [code generated]
+    ./example.js 142 bytes [built] [code generated]
       [used exports unknown]
       entry ./example main
-  desktop (webpack 5.78.0) compiled successfully
+  desktop (webpack 5.95.0) compiled successfully
 ```
 
 ## Production mode
 
 ```
 mobile:
-  asset mobile.js 195 bytes [emitted] [minimized] (name: main)
-  chunk (runtime: main) mobile.js (main) 114 bytes [entry] [rendered]
+  asset mobile.js 212 bytes [emitted] [minimized] (name: main)
+  chunk (runtime: main) mobile.js (main) 162 bytes [entry] [rendered]
     > ./example main
     dependent modules 20 bytes [dependent] 1 module
-    ./example.js 94 bytes [built] [code generated]
+    ./example.js 142 bytes [built] [code generated]
       [no exports used]
       entry ./example main
-  mobile (webpack 5.78.0) compiled successfully
+  mobile (webpack 5.95.0) compiled successfully
 
 desktop:
-  asset desktop.js 37 bytes [emitted] [minimized] (name: main)
-  chunk (runtime: main) desktop.js (main) 94 bytes [entry] [rendered]
+  asset desktop.js 57 bytes [emitted] [minimized] (name: main)
+  chunk (runtime: main) desktop.js (main) 142 bytes [entry] [rendered]
     > ./example main
-    ./example.js 94 bytes [built] [code generated]
+    ./example.js 142 bytes [built] [code generated]
       [no exports used]
       entry ./example main
-  desktop (webpack 5.78.0) compiled successfully
+  desktop (webpack 5.95.0) compiled successfully
 ```
